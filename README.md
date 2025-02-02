@@ -109,8 +109,71 @@ write memory
    ```
 4. **Ensure PCs Have Correct Gateway**
 
+# **🔥 Part 2: VLAN Trunking & Router-on-a-Stick**
+
+In **Part 2**, we focus on **trunking VLANs** between multiple switches and setting up **Router-on-a-Stick** for VLAN routing.
+
+### **🛠️ Lab Objectives (Part 2)**
+✔️ Configure **trunk links** between **SW1** and **SW2**  
+✔️ Enable **802.1Q encapsulation** for VLAN routing on the router  
+✔️ Set up **subinterfaces** on the router  
+✔️ Allow **communication between VLANs via Inter-VLAN Routing**  
 
 ---
+
+### **📡 Network Topology (Part 2)**
+![image](https://github.com/user-attachments/assets/af6c6a4b-d2b8-40e3-bf13-97286357f53e)
+
+- **SW2** connects VLANs **10, 20, 30** to **SW1** via **trunk ports**  
+- **Router-on-a-stick** is configured on **R1** to allow VLAN routing  
+
+---
+
+### **⚙️ Switch 2 (SW2) - Trunk Configuration**
+```sh
+interface GigabitEthernet0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk native vlan 1001
+```
+
+---
+
+### **⚙️ Router (R1) - Router-on-a-Stick Configuration**
+```sh
+interface GigabitEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 10.0.0.62 255.255.255.192
+
+interface GigabitEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 10.0.0.126 255.255.255.192
+
+interface GigabitEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 10.0.0.190 255.255.255.192
+```
+
+---
+
+### **✅ Testing (Part 2)**
+- **Check VLANs on switches:**  
+  ```sh
+  show vlan brief
+  ```
+- **Verify trunk links:**  
+  ```sh
+  show interfaces trunk
+  ```
+- **Ensure router subinterfaces are active:**  
+  ```sh
+  show ip interface brief
+  ```
+- **Ping across VLANs:**  
+  ```sh
+  ping 10.0.0.126
+  ping 10.0.0.190
+  ```
 
 ## 🚀 **How to Use**
 1. **Open Cisco Packet Tracer** and load the `.pkt` file.
